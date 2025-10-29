@@ -52,3 +52,8 @@
 {"level":"info","message":"User created successfully: fiki@gmail.com","service":"acquisitions-api","timestamp":"2025-10-28T14:14:22.706Z"}
 {"level":"info","message":"User registered successfully: fiki@gmail.com","service":"acquisitions-api","timestamp":"2025-10-28T14:14:22.708Z"}
 {"level":"info","message":"::1 - - [28/Oct/2025:14:14:22 +0000] \"POST /api/auth/sign-up HTTP/1.1\" 201 99 \"-\" \"HTTPie\"","service":"acquisitions-api","timestamp":"2025-10-28T14:14:22.710Z"}
+{"level":"info","message":"User authenticated successfully: fiki@gmail.com","service":"acquisitions-api","timestamp":"2025-10-29T22:04:38.671Z"}
+{"level":"info","message":"User signed in successfully: fiki@gmail.com","service":"acquisitions-api","timestamp":"2025-10-29T22:04:38.678Z"}
+{"level":"info","message":"::1 - - [29/Oct/2025:22:04:38 +0000] \"POST /api/auth/sign-in HTTP/1.1\" 200 98 \"-\" \"HTTPie\"","service":"acquisitions-api","timestamp":"2025-10-29T22:04:38.681Z"}
+{"level":"info","message":"User signed out","service":"acquisitions-api","timestamp":"2025-10-29T22:04:59.789Z"}
+{"level":"info","message":"::1 - - [29/Oct/2025:22:04:59 +0000] \"POST /api/auth/sign-out HTTP/1.1\" 200 29 \"-\" \"HTTPie\"","service":"acquisitions-api","timestamp":"2025-10-29T22:04:59.792Z"}
