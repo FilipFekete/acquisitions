@@ -1,0 +1,18 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: app
+    env_file:
+      - .env.production
+    environment:
+      NODE_ENV: production
+      # Must be a Neon Cloud connection string (e.g., ...neon.tech...)
+      DATABASE_URL: ${DATABASE_URL}
+    ports:
+      - "3000:3000"
+    command: npm start
+    restart: unless-stopped

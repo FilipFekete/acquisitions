@@ -1,0 +1,37 @@
+version: "3.9"
+
+services:
+  neon-local:
+    image: neondatabase/neon_local:latest
+    container_name: neon-local
+    ports:
+      - "5432:5432"
+    environment:
+      NEON_API_KEY: ${NEON_API_KEY}
+      NEON_PROJECT_ID: ${NEON_PROJECT_ID}
+      PARENT_BRANCH_ID: ${PARENT_BRANCH_ID}
+      # DELETE_BRANCH: "false" # uncomment to persist branches after shutdown
+    # Optional: persist a branch per Git branch
+    # volumes:
+    #   - ./.neon_local/:/tmp/.neon_local
+    #   - ./.git/HEAD:/tmp/.git/HEAD:ro,consistent
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: app
+    depends_on:
+      - neon-local
+    env_file:
+      - .env.development
+    environment:
+      NODE_ENV: development
+      # Fallback if DATABASE_URL is not set in .env.development
+      DATABASE_URL: ${DATABASE_URL:-postgres://neon:npg@neon-local:5432/appdb?sslmode=require}
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npm run dev
