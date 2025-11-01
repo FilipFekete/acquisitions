@@ -1,26 +1,40 @@
-# syntax=docker/dockerfile:1
+# Base image with Node.js
+FROM node:20-alpine AS base
 
-ARG NODE_VERSION=20
-
-FROM node:${NODE_VERSION}-alpine AS base
+# Set working directory
 WORKDIR /app
-ENV NODE_ENV=production
-RUN addgroup -g 1001 -S nodejs && adduser -S node -u 1001
 
-FROM base AS deps
-ENV NODE_ENV=development
+# Copy package files
 COPY package*.json ./
-RUN npm ci || npm install
 
-FROM deps AS build
+# Install dependencies
+RUN npm ci --only=production && npm cache clean --force
+
+# Copy source code
 COPY . .
-# Build if a build script exists; ignore errors if not
-RUN npm run build || echo "No build step"
 
-FROM base AS prod
-ENV NODE_ENV=production
-COPY --from=deps /app/node_modules /app/node_modules
-COPY --from=build /app /app
-USER node
+# Create non-root user for security
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S nodejs -u 1001
+
+# Change ownership of the app directory
+RUN chown -R nodejs:nodejs /app
+USER nodejs
+
+# Expose the port
 EXPOSE 3000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:3000/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) }).on('error', () => { process.exit(1) })"
+
+# Development stage
+FROM base AS development
+USER root
+RUN npm ci && npm cache clean --force
+USER nodejs
+CMD ["npm", "run", "dev"]
+
+# Production stage
+FROM base AS production
 CMD ["npm", "start"]
