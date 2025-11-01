@@ -1,7 +1,6 @@
 import aj from '#config/arcjet.js'
 import {slidingWindow} from "@arcjet/node";
 import logger from "#config/logger.js";
-import app from "../app.js";
 
 const securityMiddleware = async (req, res, next) => {
     try{
