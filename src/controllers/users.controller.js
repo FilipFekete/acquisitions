@@ -50,7 +50,7 @@ export const fetchUserById = async (req, res, next) => {
     }
 };
 
-export const updateUser = async (req, res, next) => {
+export const updateUserById = async (req, res, next) => {
     try {
         const idValidation = userIdSchema.safeParse(req.params);
         if (!idValidation.success) {
@@ -99,7 +99,7 @@ export const updateUser = async (req, res, next) => {
     }
 };
 
-export const deleteUser = async (req, res, next) => {
+export const deleteUserById = async (req, res, next) => {
     try {
         const validationResult = userIdSchema.safeParse(req.params);
         if (!validationResult.success) {
