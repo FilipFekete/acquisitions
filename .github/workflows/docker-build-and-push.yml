@@ -9,7 +9,7 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
     env:
-      IMAGE: docker.io/${{ secrets.DOCKER_USERNAME }}/$acquisitions
+      IMAGE: docker.io/${{ secrets.DOCKER_USERNAME }}/kubernetes-demo-api
     steps:
       - name: Checkout
         uses: actions/checkout@v4
