@@ -15,7 +15,11 @@ export const getAllUsers = async () => {
 
 export const getUserById = async id => {
   try {
-    const [user] = await db.select().from(users).where(eq(users.id, id)).limit(1);
+    const [user] = await db
+      .select()
+      .from(users)
+      .where(eq(users.id, id))
+      .limit(1);
     return user || null;
   } catch (e) {
     logger.error('Error getting user by id: ', e);
@@ -25,7 +29,11 @@ export const getUserById = async id => {
 
 export const updateUser = async (id, updates) => {
   try {
-    const [existing] = await db.select().from(users).where(eq(users.id, id)).limit(1);
+    const [existing] = await db
+      .select()
+      .from(users)
+      .where(eq(users.id, id))
+      .limit(1);
     if (!existing) {
       throw new Error('User not found');
     }
@@ -36,7 +44,11 @@ export const updateUser = async (id, updates) => {
     }
     payload.updated_at = new Date();
 
-    const [updated] = await db.update(users).set(payload).where(eq(users.id, id)).returning();
+    const [updated] = await db
+      .update(users)
+      .set(payload)
+      .where(eq(users.id, id))
+      .returning();
 
     return updated;
   } catch (e) {
@@ -47,7 +59,10 @@ export const updateUser = async (id, updates) => {
 
 export const deleteUser = async id => {
   try {
-    const [deleted] = await db.delete(users).where(eq(users.id, id)).returning();
+    const [deleted] = await db
+      .delete(users)
+      .where(eq(users.id, id))
+      .returning();
 
     if (!deleted) {
       throw new Error('User not found');
