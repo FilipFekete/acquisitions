@@ -1,83 +1,139 @@
-# Docker + Neon setup
+# 🏗️ **Acquisitions**
 
-This repository is dockerized for local development with Neon Local (ephemeral branches) and production with Neon Cloud.
+> A modern backend architecture showcasing clean engineering practices, robust CI/CD automation, and cloud-ready deployment using Docker and GitHub Actions.
 
-## Files added
+This repository demonstrates full-cycle backend development — from RESTful API design and authentication to automated testing, containerization, and continuous integration pipelines.  
+It’s structured to serve as both a **production-ready backend template** and a **portfolio development piece**.
 
-- `Dockerfile` — multi-stage build for the app
-- `docker-compose.dev.yml` — app + Neon Local proxy (for development)
-- `docker-compose.prod.yml` — app only (connects to Neon Cloud)
-- `.env.development.example` — sample env for development
-- `.env.production.example` — sample env for production
+---
 
-## Prerequisites
+## 🚀 **Highlights**
 
-- Docker Desktop (Compose v2)
-- A Neon account, Project ID, and API key
+- ⚙️ **Modular Node.js + Express API** with scalable architecture
+- 🧩 **MVC pattern** using controllers, middleware, and models
+- 🧠 **Drizzle ORM** for type-safe and elegant database access
+- 🧰 **Comprehensive CI/CD pipelines** via GitHub Actions
+- 🧪 **Automated testing** powered by Jest & Supertest
+- 🧹 **Code quality enforcement** using ESLint + Prettier
+- 🐳 **Dockerized environment** for consistent dev and production builds
+- ☁️ **DockerHub integration** for seamless image deployment
+- 🔒 **Security-focused middleware** with Helmet, JWT & Zod validation
+- 🧾 **Documentation-first approach** with clear prerequisites and setup guides
 
-## 1) Local development (Neon Local)
+---
 
-1. Create `.env.development` from the example and fill in secrets:
-   - Copy: `cp .env.development.example .env.development` (PowerShell: `Copy-Item .env.development.example .env.development`)
-   - Set:
-     - `NEON_API_KEY` — Neon API key
-     - `NEON_PROJECT_ID` — Project → Settings → General
-     - `PARENT_BRANCH_ID` — the parent branch to fork ephemeral branches from (often your main branch id)
-2. Start services:
-   - `docker compose -f docker-compose.dev.yml up --build`
-3. Your app gets `DATABASE_URL` pointing at Neon Local:
-   - `postgres://neon:npg@neon-local:5432/appdb?sslmode=require`
+## 🛠️ **Tech Stack**
 
-Ephemeral branches: Neon Local will create a fresh branch at startup and delete it when it stops. To persist a branch, set `DELETE_BRANCH=false` and mount the volumes in `docker-compose.dev.yml` (see commented lines).
+### 🧩 **Backend**
 
-### If you use node-postgres (pg) or postgres libs
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white)
+![Express](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)
+![Drizzle ORM](https://img.shields.io/badge/Drizzle%20ORM-0081CB?style=for-the-badge&logo=typescript&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=jsonwebtokens)
+![bcrypt](https://img.shields.io/badge/bcrypt-00599C?style=for-the-badge)
+![Zod](https://img.shields.io/badge/Zod-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
 
-Neon Local uses a self-signed certificate. Add the SSL option in your DB client if needed:
+- **Node.js + Express.js** — Production-ready REST API foundation
+- **Drizzle ORM** — Type-safe SQL toolkit for PostgreSQL or MySQL
+- **JWT (jsonwebtoken)** — Secure token-based authentication
+- **bcrypt** — Hashes and verifies passwords securely
+- **Zod** — Schema validation for requests (e.g. sign-up, login forms)
 
-```js path=null start=null
-// pg example
-new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false },
-});
-```
+---
 
-### If you use @neondatabase/serverless
+### 🧰 **Utilities & Middleware**
 
-Configure the Neon Local HTTP endpoint and disable websockets:
+![Winston](https://img.shields.io/badge/Winston-005571?style=for-the-badge&logo=logstash&logoColor=white)
+![Helmet](https://img.shields.io/badge/Helmet-000000?style=for-the-badge&logo=securityscorecard&logoColor=white)
+![Morgan](https://img.shields.io/badge/Morgan-00C7B7?style=for-the-badge)
+![CORS](https://img.shields.io/badge/CORS-FF6F00?style=for-the-badge)
+![Cookie Parser](https://img.shields.io/badge/Cookie--Parser-FFCA28?style=for-the-badge)
 
-```ts path=null start=null
-import { neon, neonConfig } from '@neondatabase/serverless';
-neonConfig.fetchEndpoint = 'http://neon-local:5432/sql';
-neonConfig.useSecureWebSocket = false;
-neonConfig.poolQueryViaFetch = true;
-const sql = neon(process.env.DATABASE_URL!);
-```
+- **Winston** — Configurable logging with transport support
+- **Helmet** — HTTP header hardening for security
+- **Morgan** — Request logging middleware
+- **CORS** — Cross-Origin Resource Sharing support
+- **cookie-parser** — Cookie handling for authentication and sessions
 
-## 2) Production (Neon Cloud)
+---
 
-1. Create `.env.production` from the example and set `DATABASE_URL` to your Neon Cloud URL (contains `neon.tech`):
-   - `Copy-Item .env.production.example .env.production`
-2. Start:
-   - `docker compose -f docker-compose.prod.yml up --build -d`
+### 🧪 **Testing & Quality**
 
-No Neon Local runs in production. The app connects directly to Neon Cloud using `DATABASE_URL`.
+![Jest](https://img.shields.io/badge/Jest-C21325?style=for-the-badge&logo=jest&logoColor=white)
+![Supertest](https://img.shields.io/badge/Supertest-000000?style=for-the-badge&logo=testinglibrary&logoColor=white)
+![ESLint](https://img.shields.io/badge/ESLint-4B32C3?style=for-the-badge&logo=eslint&logoColor=white)
+![Prettier](https://img.shields.io/badge/Prettier-F7B93E?style=for-the-badge&logo=prettier&logoColor=white)
 
-### Migrations (optional)
+- **Jest** — Unit and integration testing framework
+- **Supertest** — HTTP assertions for testing API endpoints
+- **ESLint + Prettier** — Code linting and consistent formatting
 
-Run migrations as a one-off task using the same image:
+---
 
-```sh path=null start=null
-docker compose -f docker-compose.prod.yml run --rm app npm run migrate
-```
+### ☁️ **DevOps / Deployment**
 
-## 3) How environment switching works
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![Docker Compose](https://img.shields.io/badge/Docker%20Compose-384D54?style=for-the-badge&logo=docker&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white)
+![DockerHub](https://img.shields.io/badge/DockerHub-0db7ed?style=for-the-badge&logo=docker&logoColor=white)
 
-- Dev compose uses `.env.development` and sets `DATABASE_URL` to Neon Local.
-- Prod compose uses `.env.production` and expects a Neon Cloud `DATABASE_URL`.
-- No connection strings are hardcoded in images; everything flows via env vars.
+- **Docker** — Containerization for environment consistency
+- **Docker Compose** — Dev & Prod configuration separation
+- **GitHub Actions** — Automated CI/CD pipelines
+- **DockerHub** — Continuous delivery for container images
 
-## 4) Git hygiene
+---
 
-- `.neon_local/` metadata is ignored by git.
-- Do not commit `.env.development` or `.env.production` with secrets.
+## 🧾 **CI/CD Overview (GitHub Actions)**
+
+### **Workflows**
+
+- **`lint-and-format.yml`** — ESLint + Prettier checks for consistent code style
+- **`tests.yml`** — Runs Jest + Supertest tests and publishes coverage
+- **`docker-build-and-push.yml`** — Builds the Docker image and pushes to DockerHub
+
+---
+
+### **Stages**
+
+| Stage | Tooling | Outcome |
+|--------|----------|----------|
+| **Lint & Format** | ESLint, Prettier | Enforced code quality & style |
+| **Test & Coverage** | Jest, Supertest | Regressions caught early, coverage tracked |
+| **Build & Package** | Docker | Reproducible, portable image |
+| **Publish** | DockerHub | Image available for deployments |
+
+---
+
+## 🧩 **Architecture & Best Practices**
+
+- **Clean layering**: routes → controllers → services → models
+- **Validation**: Zod-based schemas for safe request parsing
+- **Security**: Helmet, JWT auth middleware, CORS, cookie-parser
+- **Logging**: Winston logger with transports and log levels
+- **Config & Observability**: Environment-based configuration and centralized logging
+- **Migrations**: Drizzle SQL + metadata tracking (`drizzle/`)
+- **Developer ergonomics**: ESLint, Prettier, shell scripts for dev/prod workflows
+- **Scalability**: Modular service layer and reusable middleware
+
+---
+
+## 🛠️ **Packages Used**
+
+| Package | Purpose |
+|----------|----------|
+| **express** | Core web framework |
+| **drizzle-orm** | Type-safe database ORM |
+| **jsonwebtoken (JWT)** | Auth middleware for token validation |
+| **bcrypt** | Secure password hashing |
+| **zod** | Validation schema for signup/login |
+| **helmet** | Security headers |
+| **morgan** | HTTP request logger |
+| **cors** | Cross-origin resource sharing |
+| **cookie-parser** | Cookie parsing & management |
+| **winston** | Structured logging |
+| **jest** | Testing framework |
+| **supertest** | API endpoint testing |
+
+### **Local Deployment** ###
+Follow **`Prerequisites.md`**
