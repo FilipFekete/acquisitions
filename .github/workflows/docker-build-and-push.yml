@@ -9,7 +9,7 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
     env:
-      IMAGE: docker.io/${{ secrets.DOCKER_USERNAME }}/${{ github.event.repository.name }}
+      IMAGE: docker.io/${{ secrets.DOCKER_USERNAME }}/$acquisitions
     steps:
       - name: Checkout
         uses: actions/checkout@v4
