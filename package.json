@@ -5,6 +5,7 @@
   "type": "module",
   "main": "index.js",
   "imports": {
+    "#src/*": "./src/*",
     "#config/*": "./src/config/*",
     "#models/*": "./src/models/*",
     "#routes/*": "./src/routes/*",
@@ -26,7 +27,7 @@
     "db:studio": "drizzle-kit studio",
     "dev:docker": "wsl scripts/dev.sh",
     "prod:docker": "wsl scripts/prod.sh",
-    "test": "jest"
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest"
   },
   "repository": {
     "type": "git",
@@ -57,6 +58,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.38.0",
+    "cross-env": "^10.1.0",
     "drizzle-kit": "^0.31.5",
     "eslint": "^9.38.0",
     "eslint-config-prettier": "^10.1.8",
